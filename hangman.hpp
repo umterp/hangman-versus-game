@@ -31,7 +31,13 @@ class Player {
         int numGuesses;
         int numStrikes;
         bool isWinner;
-    
+        int points;
+        Player(string playerName) {
+            name = playerName;
+            numStrikes = 0;
+            isWinner = false;
+            points = 0;
+        }
 };
 
 int getNumPlayers() {
@@ -65,6 +71,10 @@ string stripLettersFromAnswer(string &guessPhrase) {
     return guessStripped;
 }
 
+/* TODO need to output all of the letters that have been guessed
+    *  so that no letters can be repeated.
+    */
+
 char getGuess(string &guessStripped, string playerName) {
     string guess ("");
     bool isValid = false;
@@ -85,6 +95,11 @@ int getCompareGuess(Player *player, string &guessPhrase, string *guessStripped, 
     int numMatches = 0;
     string tempGuessStripped ("");
     string::iterator it;
+
+    /* TODO need to edit this to observe the blank string as well so
+    *  no already guessed letters are overwritten with blanks.
+    */
+
     for (it = guessPhrase.begin(); it != guessPhrase.end(); it++) {
         if (int(*it) == int(guessChar)) {
             cout << "Char: " << guessChar << endl;
@@ -104,4 +119,16 @@ int getCompareGuess(Player *player, string &guessPhrase, string *guessStripped, 
     }
     cout << tempGuessStripped << endl;
     return numMatches;
+}
+
+Player[] getPlayersList(int numPlayers) {
+    Player playersList[numPlayers];
+    Player tempPlayer;
+    string playerName;
+    for (int i=0; i < numPlayers; i++) {
+        cout << "Player " << i + 1 << ", please enter your name: " << endl;
+        cin >> playerName;
+        playersList[i] = Player(playerName);
+    }
+    return playersList;
 }
