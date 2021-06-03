@@ -13,9 +13,9 @@ using namespace std;
 //function declarations
 int getNumPlayers();
 string getPhraseForGame();
-char getGuess();
-int getCompareGuess();
-void getPlayersList();
+string getGuess(string &guessStripped, string playerName);
+int getFoundWinningGuess(Player *player, string &guessPhrase, string *guessStripped, char guessChar);
+void getPlayersList(int numPlayers, Player *players);
 
 //static variables
 int MAX_TRIES = 5;
@@ -40,20 +40,16 @@ int main() {
     getPlayersList(numPlayers, players);
 
     // continue allowing players to guess in sequential order until a winner is determined
-    //while (!isWinner) {
+    while (!isWinner) {
         for (int i =0; i < numPlayers; i++) {
             Player player = *(players + i);
-            char guessChar = getGuess(*guessStripped, player.name);
-            int numMatches = getCompareGuess(&player, guessPhrase, guessStripped, guessChar);
-            cout << "Guess: " << guessChar << endl;
-            cout << "Num Matches: " << numMatches << endl;
-            cout << "Player total Num Matches: " << player.numMatches << endl;
-            cout << "Player total Num Guesses: " << player.numGuesses << endl;
+            string guessChar = getGuess(*guessStripped, player.name);
+            isWinner = getFoundWinningGuess(&player, guessPhrase, guessStripped, guessChar);
+            if (isWinner) {
+                break;
+            }
         }
-        isWinner = true;
-    //}
-
-    cout << "isWinner: " << isWinner << endl;
+    }
     
     return 0;
 }
