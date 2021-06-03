@@ -20,6 +20,9 @@
 //namespace
 using namespace std;
 
+//utility function declarations
+string formattedBlankString(string blankGuess, int strLen);
+
 //static variables
 const int SPACE_ASCII_VALUE = 32;
 const string GUESS_PHRASES[5] = {"a short fuse","butterflies in my stomach",
@@ -30,13 +33,21 @@ class Player {
         string name;
         int numGuesses;
         int numStrikes;
+        int numMatches;
         bool isWinner;
-        int points;
         Player(string playerName) {
             name = playerName;
             numStrikes = 0;
+            numMatches = 0;
+            numGuesses = 0;
             isWinner = false;
-            points = 0;
+            
+        }
+        Player() {
+            numStrikes = 0;
+            numMatches = 0;
+            numGuesses = 0;
+            isWinner = false;
         }
 };
 
@@ -79,7 +90,7 @@ char getGuess(string &guessStripped, string playerName) {
     string guess ("");
     bool isValid = false;
     regex str_expr ("[a-zA-Z]{1}");
-    cout << "Solve: " << guessStripped << endl;
+    cout << "Solve: " << formattedBlankString(guessStripped, guessStripped.size()) << endl;
     while(!isValid) {
         cout << playerName << ", enter your guess: " << endl;
         cin >> guess;
@@ -104,31 +115,37 @@ int getCompareGuess(Player *player, string &guessPhrase, string *guessStripped, 
         if (int(*it) == int(guessChar)) {
             cout << "Char: " << guessChar << endl;
             tempGuessStripped.push_back(guessChar);
-            tempGuessStripped.append(" ");
-            cout << tempGuessStripped << endl;
             numMatches++;
         } else if (int(*it) == SPACE_ASCII_VALUE) {
-            tempGuessStripped.append("  ");
+            tempGuessStripped.append(" ");
         } else {
-            tempGuessStripped.append("_ ");
+            tempGuessStripped.append("_");
         }
     }
     *guessStripped = tempGuessStripped;
     if (numMatches > 0) {
+        player->numMatches = player->numMatches + numMatches;
         player->numStrikes++;
     }
+    player->numGuesses++;
     cout << tempGuessStripped << endl;
     return numMatches;
 }
 
-Player[] getPlayersList(int numPlayers) {
-    Player playersList[numPlayers];
-    Player tempPlayer;
+void getPlayersList(int numPlayers, Player *players) {
     string playerName;
     for (int i=0; i < numPlayers; i++) {
         cout << "Player " << i + 1 << ", please enter your name: " << endl;
         cin >> playerName;
-        playersList[i] = Player(playerName);
+        players[i] = Player(playerName);
     }
-    return playersList;
+}
+
+string formattedBlankString(string blankGuess, int strLen) {
+    string tempString ("");
+    for (int i=0; i < blankGuess.size(); i++) {
+        tempString.push_back(blankGuess[i]);
+        tempString.append(" ");
+    }
+    return tempString;
 }
