@@ -20,6 +20,9 @@
 //namespace
 using namespace std;
 
+//utility function declarations
+string formattedBlankString(string blankGuess, int strLen);
+
 //static variables
 const int SPACE_ASCII_VALUE = 32;
 const string GUESS_PHRASES[5] = {"a short fuse","butterflies in my stomach",
@@ -30,8 +33,22 @@ class Player {
         string name;
         int numGuesses;
         int numStrikes;
+        int numMatches;
         bool isWinner;
-    
+        Player(string playerName) {
+            name = playerName;
+            numStrikes = 0;
+            numMatches = 0;
+            numGuesses = 0;
+            isWinner = false;
+            
+        }
+        Player() {
+            numStrikes = 0;
+            numMatches = 0;
+            numGuesses = 0;
+            isWinner = false;
+        }
 };
 
 int getNumPlayers() {
@@ -65,11 +82,15 @@ string stripLettersFromAnswer(string &guessPhrase) {
     return guessStripped;
 }
 
+/* TODO need to output all of the letters that have been guessed
+    *  so that no letters can be repeated.
+    */
+
 char getGuess(string &guessStripped, string playerName) {
     string guess ("");
     bool isValid = false;
     regex str_expr ("[a-zA-Z]{1}");
-    cout << "Solve: " << guessStripped << endl;
+    cout << "Solve: " << formattedBlankString(guessStripped, guessStripped.size()) << endl;
     while(!isValid) {
         cout << playerName << ", enter your guess: " << endl;
         cin >> guess;
@@ -85,23 +106,46 @@ int getCompareGuess(Player *player, string &guessPhrase, string *guessStripped, 
     int numMatches = 0;
     string tempGuessStripped ("");
     string::iterator it;
+
+    /* TODO need to edit this to observe the blank string as well so
+    *  no already guessed letters are overwritten with blanks.
+    */
+
     for (it = guessPhrase.begin(); it != guessPhrase.end(); it++) {
         if (int(*it) == int(guessChar)) {
             cout << "Char: " << guessChar << endl;
             tempGuessStripped.push_back(guessChar);
-            tempGuessStripped.append(" ");
-            cout << tempGuessStripped << endl;
             numMatches++;
         } else if (int(*it) == SPACE_ASCII_VALUE) {
-            tempGuessStripped.append("  ");
+            tempGuessStripped.append(" ");
         } else {
-            tempGuessStripped.append("_ ");
+            tempGuessStripped.append("_");
         }
     }
     *guessStripped = tempGuessStripped;
     if (numMatches > 0) {
+        player->numMatches = player->numMatches + numMatches;
         player->numStrikes++;
     }
+    player->numGuesses++;
     cout << tempGuessStripped << endl;
     return numMatches;
+}
+
+void getPlayersList(int numPlayers, Player *players) {
+    string playerName;
+    for (int i=0; i < numPlayers; i++) {
+        cout << "Player " << i + 1 << ", please enter your name: " << endl;
+        cin >> playerName;
+        players[i] = Player(playerName);
+    }
+}
+
+string formattedBlankString(string blankGuess, int strLen) {
+    string tempString ("");
+    for (int i=0; i < blankGuess.size(); i++) {
+        tempString.push_back(blankGuess[i]);
+        tempString.append(" ");
+    }
+    return tempString;
 }
