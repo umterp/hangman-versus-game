@@ -28,11 +28,6 @@ int main() {
     string *guessStripped = &blankGuess;
 
     int numPlayers = getNumPlayers();
-
-    cout << "Guess Phrase: " << guessPhrase << endl;
-    cout << "Blank Lines for Guesses: " << blankGuess << endl;
-    cout << "numPlayers: " << numPlayers << endl;
-    cout << "isWinner: " << isWinner << endl;
     
     Player newPlayers[numPlayers];
     Player *players = newPlayers;

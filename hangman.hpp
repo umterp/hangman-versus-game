@@ -117,7 +117,6 @@ bool getFoundWinningGuess(Player *player, string &guessPhrase, string *guessStri
     } else {
         isWinnerFound = isSuccessfulSingleGuess(player, guessPhrase, guessStripped, guessChar[0]);
     }
-    cout << isWinnerFound << endl;
     return isWinnerFound;
 }
 
@@ -134,6 +133,8 @@ bool isSuccessfulGuessForTotalPhrase(Player *player, string guessPhrase) {
     if (isWinnerFound) {
         cout << player->name << " is the Winner!! Thanks for playing!" << endl;
         player->isWinner = true;
+    } else {
+        cout << "Dude.... Really??" << endl;
     }
     return isWinnerFound;
 }
@@ -142,11 +143,6 @@ bool isSuccessfulSingleGuess(Player *player, string guessPhrase, string *guessSt
     int numMatches = 0;
     string tempGuessStripped ("");
     bool isUnderscorePresent;
-
-    // testing
-    cout << "GP: " << guessPhrase << endl;
-    cout << "GS: " << *guessStripped << endl;
-    cout << "Player: " << player->name << endl;
 
     /* TODO need to edit this to observe the blank string as well so
     *  no already guessed letters are overwritten with blanks.
@@ -174,8 +170,6 @@ bool isSuccessfulSingleGuess(Player *player, string guessPhrase, string *guessSt
         cout << "Sorry, " << player->name << ", but you didn't get any matches. Try harder." << endl;
     }
     player->numGuesses++;
-    cout << tempGuessStripped << endl;
-    cout << isUnderscorePresent << endl;
     return !isUnderscorePresent;
 }
 
